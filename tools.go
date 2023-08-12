@@ -1,6 +1,7 @@
 package main
 
 import (
+	"crypto/md5"
 	"crypto/sha256"
 	"encoding/hex"
 	"io"
@@ -53,6 +54,12 @@ func sha256File(filePath string) (string, error) {
 
 	hashSum := hash.Sum(nil)
 	return hex.EncodeToString(hashSum), nil
+}
+
+// 计算字符串md5值
+func Md5(String string) string {
+	hash := md5.Sum([]byte(String))
+	return hex.EncodeToString(hash[:])
 }
 
 // GetFileType 获取文件类型

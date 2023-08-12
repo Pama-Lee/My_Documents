@@ -74,9 +74,28 @@ func UserLogin(c *gin.Context) {
 			})
 			return
 		}
-	}
+	} else {
+		// 查询用户
+		var user User
+		if err := DB.Where("username = ? & password = ?", req.Username, req.Password).First(&user).Error; err != nil {
+			BadRequest(c, "用户名或密码错误")
+			return
+		}
 
-	SuccessMsg(c, "登陆成功")
+		// 生成token
+		token := Md5(time.Now().String()+"_"+req.Username) + Md5(time.Now().String()+"_"+req.Password) + Md5(time.Now().String()+"_"+req.Username+"_"+req.Password)
+		tokenEntity := Token{
+			UserID: user.ID,
+			Token:  token,
+			Expire: time.Now().Unix() + 3600*24*7,
+			Status: 1,
+		}
+		DB.Create(&tokenEntity)
+
+		// 返回
+		Success(c, token)
+		return
+	}
 }
 
 // 验证登陆信息
