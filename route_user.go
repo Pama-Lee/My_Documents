@@ -77,7 +77,7 @@ func UserLogin(c *gin.Context) {
 	} else {
 		// 查询用户
 		var user User
-		if err := DB.Where("username = ? & password = ?", req.Username, req.Password).First(&user).Error; err != nil {
+		if err := DB.Where("username = ?", req.Username).Where("password = ?", req.Password).First(&user).Error; err != nil {
 			BadRequest(c, "用户名或密码错误")
 			return
 		}
@@ -93,7 +93,9 @@ func UserLogin(c *gin.Context) {
 		DB.Create(&tokenEntity)
 
 		// 返回
-		Success(c, token)
+		Success(c, gin.H{
+			"token": token,
+		})
 		return
 	}
 }
