@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mydocuments:
+    image: ghcr.io/pama-lee/my_documents:latest
+    ports:
+      - "20001:8080"
+    volumes:
+      - mydocuments-data:/root/config
+      - /data/my_documents/files:/root/files
+volumes:
+  mydocuments-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/my_documents/files

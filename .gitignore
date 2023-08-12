@@ -20,8 +20,8 @@
 # Go workspace file
 go.work
 
-./config
-./files
-./test
+./config/
+./files/
+./test/
 
-./.idea
+./.idea/
