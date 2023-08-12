@@ -24,6 +24,9 @@ WORKDIR /root/
 # 将构建的二进制文件复制到新容器中
 COPY --from=builder /app/mydocuments .
 
+# 添加一个.env文件，其中值为env=release
+RUN echo "env=release" > .env
+
 # 对外暴露的端口
 EXPOSE 8080
 
