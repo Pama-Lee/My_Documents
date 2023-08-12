@@ -5,10 +5,16 @@ services:
     ports:
       - "20001:8080"
     volumes:
-      - mydocuments-data:/root/config
-      - /data/my_documents/files:/root/files
+      - mydocuments-config:/root/config
+      - mydocuments-files:/root/files
 volumes:
-  mydocuments-data:
+  mydocuments-config:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /data/my_documents/config
+  mydocuments-files:
     driver: local
     driver_opts:
       o: bind
