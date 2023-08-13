@@ -1,9 +1,15 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"fmt"
+
+	"github.com/gin-gonic/gin"
+)
 
 func BadRequest(c *gin.Context, msg string) {
-	c.JSON(200, gin.H{
+	// 输出错误信息, 输出携带的headers
+	fmt.Println(msg, c.Request.Header)
+	c.JSON(400, gin.H{
 		"code": 400,
 		"data": nil,
 		"msg":  msg,
@@ -27,7 +33,7 @@ func SuccessMsg(c *gin.Context, msg string) {
 }
 
 func InternalServerError(c *gin.Context, msg string) {
-	c.JSON(200, gin.H{
+	c.JSON(500, gin.H{
 		"code": 500,
 		"data": nil,
 		"msg":  msg,
