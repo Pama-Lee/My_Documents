@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"os"
+
+	"github.com/google/uuid"
 )
 
 var (
@@ -17,7 +19,8 @@ type config struct {
 	// 服务名称
 	Name string `json:"name"`
 	// 服务版本
-	Version string `json:"version"`
+	Version    string `json:"version"`
+	Jwt_secret string `json:"jwt_secret"`
 	// 数据库
 	Database struct {
 		// 用户名
@@ -59,6 +62,7 @@ func init() {
 		defaultConfig.Database.Database = "my_documents"
 		defaultConfig.Database.Host = "127.0.0.1"
 		defaultConfig.Database.Port = "3306"
+		defaultConfig.Jwt_secret = uuid.New().String()
 
 		// 格式化json
 		data, err := json.MarshalIndent(defaultConfig, "", "    ")
@@ -97,6 +101,11 @@ func init() {
 		err = json.Unmarshal(data[:n], &config)
 		if err != nil {
 			panic(err)
+		}
+
+		// 如果jwt_secret为空则生成一个
+		if config.Jwt_secret == "" {
+			config.Jwt_secret = uuid.New().String()
 		}
 
 		// 赋值

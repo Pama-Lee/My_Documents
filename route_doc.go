@@ -118,12 +118,9 @@ func DocCreateUpload(c *gin.Context) {
 
 // GetFile
 func GetFile(c *gin.Context) {
-	// 验证
-	userID := checkLoginInfo(c)
-	if userID == 0 {
-		BadRequest(c, "请先登陆")
-		return
-	}
+
+	// 鉴权
+	JWTAuthMiddleware(c)
 
 	Uuid := c.Param("uuid")
 
@@ -337,10 +334,10 @@ func DocDetail(c *gin.Context) {
 		return
 	}
 
-	uuid := c.Param("uuid")
+	uuidStr := c.Param("uuid")
 
 	var doc Document
-	if err := DB.Where("uuid = ?", uuid).First(&doc).Error; err != nil {
+	if err := DB.Where("uuid = ?", uuidStr).First(&doc).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			BadRequest(c, "文档不存在")
 			return
@@ -348,6 +345,16 @@ func DocDetail(c *gin.Context) {
 		BadRequest(c, err.Error())
 		return
 	}
+
+	pub := uuid.New().String()
+	token, err := GenerateJWTToken(pub)
+	if err != nil {
+		BadRequest(c, err.Error())
+		return
+	}
+
+	// 生成访问链接
+	doc.URL = fmt.Sprintf("/api/v1/doc/get/%s?token=%s&pub=%s", doc.UUID, token, pub)
 
 	Success(c, doc)
 

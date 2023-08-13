@@ -10,6 +10,8 @@ type Document struct {
 	Type    string `gorm:"type:varchar(255);not null;comment:文档类型"`
 	Path    string `gorm:"type:varchar(255);not null;comment:文档路径"`
 	Creator uint   `gorm:"type:int;not null;comment:创建者"`
+	// 不参与数据库
+	URL string `gorm:"-"`
 }
 
 type DocumentVersion struct {
