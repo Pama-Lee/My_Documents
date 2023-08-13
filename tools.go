@@ -119,9 +119,6 @@ func JWTAuthMiddleware(c *gin.Context) {
 		pubString = pubStringFromQuery
 	}
 
-	// 获取token
-	tokenString = tokenString[7:]
-
 	// 解析token
 	token, claims, err := ParseJWTToken(tokenString)
 	if err != nil || !token.Valid {
