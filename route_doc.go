@@ -157,7 +157,7 @@ func GetFile(c *gin.Context) {
 	}
 
 	if (doc.Type == "docx") || (doc.Type == "xlsx") || (doc.Type == "pptx") {
-		filepath := fmt.Sprintf("./files/%s", docVersion.Path)
+		filepath := fmt.Sprintf("%s", docVersion.Path)
 		content, err := ioutil.ReadFile(filepath)
 		if err != nil {
 			InternalServerError(c, "无法读取文档内容"+filepath)
